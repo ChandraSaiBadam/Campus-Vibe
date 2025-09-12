@@ -29,7 +29,7 @@ const Navbar = ({ darkMode, setDarkMode }) => {
                 <GraduationCap className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent transition-all duration-200 group-hover:scale-105">
-                Campus Connect
+                Campus Vibe
               </span>
             </Link>
           </div>
