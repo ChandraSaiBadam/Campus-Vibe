@@ -129,7 +129,7 @@ const Home = () => {
             <h1 className="text-5xl md:text-7xl font-bold mb-8 animate-fade-in hover-lift">
               Welcome to{' '}
               <span className="block bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 bg-clip-text text-transparent animate-pulse-glow">
-                Campus Connect
+                Campus Vibe
               </span>
             </h1>
             <p className="text-xl md:text-2xl mb-12 text-white/90 max-w-4xl mx-auto animate-slide-up-fade leading-relaxed">
@@ -177,7 +177,7 @@ const Home = () => {
               Community Impact
             </h2>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              See how Campus Connect is helping students across the university
+              See how Campus Vibe is helping students across the university
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -235,7 +235,7 @@ const Home = () => {
               Everything You Need
             </h2>
             <p className="text-xl text-gray-600 dark:text-dark-text-secondary max-w-3xl mx-auto">
-              From academic tools to community features, Campus Connect has everything 
+              From academic tools to community features, Campus Vibe has everything
               to enhance your university experience.
             </p>
           </div>
@@ -276,7 +276,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-dark-text-primary mb-4">
-              Why Choose Campus Connect?
+              Why Choose Campus Vibe?
             </h2>
             <p className="text-xl text-gray-600 dark:text-dark-text-secondary max-w-3xl mx-auto">
               Built specifically for students, by students, with privacy and ease of use in mind.
