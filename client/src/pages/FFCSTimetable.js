@@ -1139,7 +1139,7 @@ const FFCSTimetable = () => {
 
                     const displayTime = timeDisplay[timeSlot] || timeSlot;
                     return (
-                      <th key={`theory-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '9px', height: '24px'}}>
+                      <th key={`theory-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '9px', height: '24px', minWidth: '28px'}}>
                         {displayTime}
                       </th>
                     );
@@ -1155,15 +1155,15 @@ const FFCSTimetable = () => {
                   {displayTimetableData.timeSlots.map(timeSlot => {
                     if (timeSlot === 'Lunch') {
                       return (
-                        <th key={`theory-end-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{fontSize: '10px'}}>
+                        <th key={`theory-end-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '10px', height: '24px', minWidth: '28px'}}>
                           Lunch
                         </th>
                       );
                     }
-                    
+
                     const endTimeDisplay = {
                       '08:00': '08:50',
-                      '08:51': '09:50', 
+                      '08:51': '09:50',
                       '09:51': '10:50',
                       '10:41': '11:50',
                       '11:40': '12:50',
@@ -1175,10 +1175,10 @@ const FFCSTimetable = () => {
                       '17:40': '18:50',
                       '18:31': '19:50'
                     };
-                    
+
                     const displayEndTime = endTimeDisplay[timeSlot] || timeSlot;
                     return (
-                      <th key={`theory-end-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{fontSize: '10px'}}>
+                      <th key={`theory-end-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '10px', height: '24px', minWidth: '28px'}}>
                         {displayEndTime}
                       </th>
                     );
@@ -1194,15 +1194,15 @@ const FFCSTimetable = () => {
                   {displayTimetableData.timeSlots.map(timeSlot => {
                     if (timeSlot === 'Lunch') {
                       return (
-                        <th key={`lab-start-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold">
+                        <th key={`lab-start-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '9px', height: '24px', minWidth: '28px'}}>
                           Lunch
                         </th>
                       );
                     }
-                    
+
                     const labStartTimeDisplay = {
                       '08:00': '08:00',
-                      '08:51': '08:51', 
+                      '08:51': '08:51',
                       '09:51': '09:51',
                       '10:41': '10:41',
                       '11:40': '11:40',
@@ -1214,10 +1214,10 @@ const FFCSTimetable = () => {
                       '17:40': '17:40',
                       '18:31': '18:31'
                     };
-                    
+
                     const displayLabStartTime = labStartTimeDisplay[timeSlot] || timeSlot;
                     return (
-                      <th key={`lab-start-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold">
+                      <th key={`lab-start-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '9px', height: '24px', minWidth: '28px'}}>
                         {displayLabStartTime}
                       </th>
                     );
@@ -1233,7 +1233,7 @@ const FFCSTimetable = () => {
                   {displayTimetableData.timeSlots.map(timeSlot => {
                     if (timeSlot === 'Lunch') {
                       return (
-                        <th key={`lab-end-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '9px', height: '24px'}}>
+                        <th key={`lab-end-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '9px', height: '24px', minWidth: '28px'}}>
                           Lunch
                         </th>
                       );
@@ -1249,7 +1249,7 @@ const FFCSTimetable = () => {
 
                     const displayLabEndTime = labEndTimeDisplay[timeSlot] || timeSlot;
                     return (
-                      <th key={`lab-end-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '9px', height: '24px'}}>
+                      <th key={`lab-end-${timeSlot}`} className="border border-gray-400 px-1 py-1 bg-gray-200 text-black font-bold" style={{width: '28px', fontSize: '9px', height: '24px', minWidth: '28px'}}>
                         {displayLabEndTime}
                       </th>
                     );
