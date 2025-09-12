@@ -1,0 +1,64 @@
+service: campus-vibe-server
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: prod
+  memorySize: 512
+  timeout: 30
+  environment:
+    NODE_ENV: production
+    MONGODB_URI: ${env:MONGODB_URI}
+    JWT_SECRET: ${env:JWT_SECRET}
+    ADMIN_SECRET: ${env:ADMIN_SECRET}
+    EMAIL_USER: ${env:EMAIL_USER}
+    EMAIL_PASS: ${env:EMAIL_PASS}
+    EMAIL_SERVICE: ${env:EMAIL_SERVICE}
+    FRONTEND_URL: ${env:FRONTEND_URL}
+
+functions:
+  api:
+    handler: server/lambda.handler
+    events:
+      - http:
+          path: /
+          method: any
+          cors:
+            origin: '${env:FRONTEND_URL}'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+      - http:
+          path: /{proxy+}
+          method: any
+          cors:
+            origin: '${env:FRONTEND_URL}'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+
+plugins:
+  - serverless-offline
+
+package:
+  exclude:
+    - .env
+    - .env.local
+    - .env.development
+    - .env.production
+    - .git/**
+    - .gitignore
+    - README.md
+    - test/**
+    - .DS_Store
+  include:
+    - server/**
