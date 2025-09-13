@@ -1,0 +1,120 @@
+{
+  "/Users/chandrasai/Desktop/CampusVibe/serverless.yml": {
+    "versionFramework": "4.18.2",
+    "servicePath": "/Users/chandrasai/Desktop/CampusVibe/serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "campus-vibe-server",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "us-east-1",
+        "stage": "prod",
+        "memorySize": 512,
+        "timeout": 30,
+        "environment": {
+          "NODE_ENV": "production",
+          "MONGODB_URI": "${env:MONGODB_URI}",
+          "JWT_SECRET": "<REDACTED>",
+          "ADMIN_SECRET": "<REDACTED>",
+          "EMAIL_USER": "${env:EMAIL_USER}",
+          "EMAIL_PASS": "${env:EMAIL_PASS}",
+          "EMAIL_SERVICE": "${env:EMAIL_SERVICE}",
+          "FRONTEND_URL": "${env:FRONTEND_URL}"
+        }
+      },
+      "functions": {
+        "api": {
+          "handler": "server/lambda.handler",
+          "events": [
+            {
+              "http": {
+                "path": "/",
+                "method": "any",
+                "cors": {
+                  "origin": "${env:FRONTEND_URL}",
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent"
+                  ]
+                }
+              }
+            },
+            {
+              "http": {
+                "path": "/{proxy+}",
+                "method": "any",
+                "cors": {
+                  "origin": "${env:FRONTEND_URL}",
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "plugins": [
+        "serverless-dotenv-plugin"
+      ],
+      "package": {
+        "exclude": [
+          ".env",
+          ".env.local",
+          ".env.development",
+          ".env.production",
+          ".git/**",
+          ".gitignore",
+          "README.md",
+          "test/**",
+          ".DS_Store"
+        ],
+        "include": [
+          "server/**"
+        ]
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs18.x",
+      "region": "us-east-1",
+      "stage": "prod",
+      "memorySize": 512,
+      "timeout": 30,
+      "environment": {
+        "NODE_ENV": "production",
+        "MONGODB_URI": "${env:MONGODB_URI}",
+        "JWT_SECRET": "<REDACTED>",
+        "ADMIN_SECRET": "<REDACTED>",
+        "EMAIL_USER": "${env:EMAIL_USER}",
+        "EMAIL_PASS": "${env:EMAIL_PASS}",
+        "EMAIL_SERVICE": "${env:EMAIL_SERVICE}",
+        "FRONTEND_URL": "${env:FRONTEND_URL}"
+      }
+    },
+    "error": {
+      "message": "You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".",
+      "stack": "Error: You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".\n    at Authentication.getAuthenticatedData (file:///Users/chandrasai/.serverless/releases/4.18.2/package/dist/sf-core.js:806:10899)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Authentication.authenticate (file:///Users/chandrasai/.serverless/releases/4.18.2/package/dist/sf-core.js:808:22245)\n    at async TraditionalRunner.resolveVariablesAndAuthenticate (file:///Users/chandrasai/.serverless/releases/4.18.2/package/dist/sf-core.js:812:2379)\n    at async TraditionalRunner.run (file:///Users/chandrasai/.serverless/releases/4.18.2/package/dist/sf-core.js:1428:27914)\n    at async route (file:///Users/chandrasai/.serverless/releases/4.18.2/package/dist/sf-core.js:1603:2878)\n    at async Object.run (file:///Users/chandrasai/.serverless/releases/4.18.2/package/dist/sf-core.js:1604:3661)\n    at async run2 (file:///Users/chandrasai/.serverless/releases/4.18.2/package/dist/sf-core.js:1604:4815)"
+    },
+    "serviceRawFile": "service: campus-vibe-server\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  region: us-east-1\n  stage: prod\n  memorySize: 512\n  timeout: 30\n  environment:\n    NODE_ENV: production\n    MONGODB_URI: ${env:MONGODB_URI}\n    JWT_SECRET: ${env:JWT_SECRET}\n    ADMIN_SECRET: ${env:ADMIN_SECRET}\n    EMAIL_USER: ${env:EMAIL_USER}\n    EMAIL_PASS: ${env:EMAIL_PASS}\n    EMAIL_SERVICE: ${env:EMAIL_SERVICE}\n    FRONTEND_URL: ${env:FRONTEND_URL}\n\nfunctions:\n  api:\n    handler: server/lambda.handler\n    events:\n      - http:\n          path: /\n          method: any\n          cors:\n            origin: \"${env:FRONTEND_URL}\"\n            headers:\n              - Content-Type\n              - X-Amz-Date\n              - Authorization\n              - X-Api-Key\n              - X-Amz-Security-Token\n              - X-Amz-User-Agent\n      - http:\n          path: /{proxy+}\n          method: any\n          cors:\n            origin: \"${env:FRONTEND_URL}\"\n            headers:\n              - Content-Type\n              - X-Amz-Date\n              - Authorization\n              - X-Api-Key\n              - X-Amz-Security-Token\n              - X-Amz-User-Agent\n\nplugins:\n  - serverless-dotenv-plugin\n\npackage:\n  exclude:\n    - .env\n    - .env.local\n    - .env.development\n    - .env.production\n    - .git/**\n    - .gitignore\n    - README.md\n    - test/**\n    - .DS_Store\n  include:\n    - server/**\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Frontend for Campus Vibe application",
   "private": true,
+  "homepage": "https://aryaman108.github.io/CampusVibe",
   "dependencies": {
     "axios": "^1.6.2",
     "html2canvas": "^1.4.1",
@@ -41,6 +42,5 @@
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6"
-  },
-  "proxy": "http://localhost:3001"
+  }
 }

@@ -25,7 +25,7 @@ functions:
           path: /
           method: any
           cors:
-            origin: '${env:FRONTEND_URL}'
+            origin: "${env:FRONTEND_URL}"
             headers:
               - Content-Type
               - X-Amz-Date
@@ -37,7 +37,7 @@ functions:
           path: /{proxy+}
           method: any
           cors:
-            origin: '${env:FRONTEND_URL}'
+            origin: "${env:FRONTEND_URL}"
             headers:
               - Content-Type
               - X-Amz-Date
@@ -47,7 +47,7 @@ functions:
               - X-Amz-User-Agent
 
 plugins:
-  - serverless-offline
+  - serverless-dotenv-plugin
 
 package:
   exclude:
