@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Frontend for Campus Vibe application",
   "private": true,
-  "homepage": "https://aryaman108.github.io/CampusVibe",
+  "homepage": ".",
   "dependencies": {
     "axios": "^1.6.2",
     "html2canvas": "^1.4.1",
@@ -17,6 +17,34 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:dev": "REACT_APP_ENVIRONMENT=development react-scripts build",
+    "build:staging": "REACT_APP_ENVIRONMENT=staging GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false IMAGE_INLINE_SIZE_LIMIT=0 react-scripts build",
+    "build:production": "REACT_APP_ENVIRONMENT=production GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false IMAGE_INLINE_SIZE_LIMIT=0 react-scripts build",
+    "build:aws": "node build-aws.js",
+    "build:aws:staging": "node build-aws.js staging",
+    "build:aws:production": "node build-aws.js production",
+    "deploy:staging": "npm run build:aws:staging",
+    "deploy:production": "npm run build:aws:production",
+    "configure:api": "node configure-api.js",
+    "configure:api:auto": "node ../scripts/configure-frontend-api.js",
+    "configure:api:production": "node ../scripts/configure-frontend-api.js production",
+    "configure:api:staging": "node ../scripts/configure-frontend-api.js staging",
+    "validate:config": "node validate-config.js",
+    "validate:deployment": "node ../scripts/validate-frontend-deployment.js",
+    "validate:deployment:staging": "node ../scripts/validate-frontend-deployment.js staging",
+    "validate:deployment:production": "node ../scripts/validate-frontend-deployment.js production",
+    "deploy:s3-cloudfront": "bash ../scripts/deploy-s3-cloudfront.sh",
+    "deploy:s3-cloudfront:staging": "bash ../scripts/deploy-s3-cloudfront.sh -e staging",
+    "deploy:s3-cloudfront:production": "bash ../scripts/deploy-s3-cloudfront.sh -e production",
+    "deploy:quick": "bash ../scripts/quick-deploy-frontend.sh",
+    "deploy:quick:staging": "bash ../scripts/quick-deploy-frontend.sh staging",
+    "monitor:costs": "bash ../scripts/monitor-frontend-costs.sh",
+    "monitor:costs:detailed": "bash ../scripts/monitor-frontend-costs.sh --detailed",
+    "setup:env": "node setup-environment.js init",
+    "setup:env:interactive": "node setup-environment.js interactive",
+    "setup:env:docs": "node setup-environment.js docs",
+    "optimize:build": "node optimize-build.js",
+    "analyze": "npm run build:production && npx serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -41,6 +69,8 @@
   "devDependencies": {
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
+    "postcss-preset-env": "^9.3.0",
+    "cssnano": "^6.0.1",
     "tailwindcss": "^3.3.6"
   }
 }

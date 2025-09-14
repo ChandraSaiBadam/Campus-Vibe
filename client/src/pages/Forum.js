@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   MessageSquare,
   ThumbsUp,
@@ -14,9 +14,10 @@ import {
   Upload,
   X,
   Image,
-  Share2
-} from 'lucide-react';
-import toast from 'react-hot-toast';
+  Share2,
+} from "lucide-react";
+import toast from "react-hot-toast";
+import api, { buildApiUrl, API_ENDPOINTS } from "../config/api";
 
 const Forum = () => {
   const navigate = useNavigate();
@@ -24,20 +25,20 @@ const Forum = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [sortBy, setSortBy] = useState('hot');
-  const [category, setCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState("hot");
+  const [category, setCategory] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [categories, setCategories] = useState([]);
   const [trendingTags, setTrendingTags] = useState([]);
 
   // Form state for creating questions
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    category: 'General',
-    tags: ''
+    title: "",
+    content: "",
+    category: "General",
+    tags: "",
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -49,19 +50,21 @@ const Forum = () => {
       const params = new URLSearchParams({
         page: currentPage.toString(),
         sort: sortBy,
-        ...(category !== 'all' && { category }),
-        ...(debouncedSearchTerm && { search: debouncedSearchTerm })
+        ...(category !== "all" && { category }),
+        ...(debouncedSearchTerm && { search: debouncedSearchTerm }),
       });
 
-      const response = await fetch(`http://localhost:3001/api/forum/questions?${params}`);
-      if (!response.ok) throw new Error('Failed to fetch questions');
+      const response = await fetch(
+        buildApiUrl(`${API_ENDPOINTS.FORUM.QUESTIONS}?${params}`)
+      );
+      if (!response.ok) throw new Error("Failed to fetch questions");
 
       const data = await response.json();
       setQuestions(data.questions);
       setTotalPages(data.pagination.pages);
     } catch (error) {
-      console.error('Error fetching questions:', error);
-      toast.error('Failed to load questions');
+      console.error("Error fetching questions:", error);
+      toast.error("Failed to load questions");
     } finally {
       setLoading(false);
     }
@@ -84,59 +87,59 @@ const Forum = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/forum/categories');
-      if (!response.ok) throw new Error('Failed to fetch categories');
-      
+      const response = await fetch(buildApiUrl(API_ENDPOINTS.FORUM.CATEGORIES));
+      if (!response.ok) throw new Error("Failed to fetch categories");
+
       const data = await response.json();
       setCategories(data.categories);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error);
     }
   };
 
   const fetchTrendingTags = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/forum/tags/trending');
-      if (!response.ok) throw new Error('Failed to fetch trending tags');
-      
+      const response = await fetch(
+        buildApiUrl(API_ENDPOINTS.FORUM.TAGS_TRENDING)
+      );
+      if (!response.ok) throw new Error("Failed to fetch trending tags");
+
       const data = await response.json();
       setTrendingTags(data.tags.slice(0, 10));
     } catch (error) {
-      console.error('Error fetching trending tags:', error);
+      console.error("Error fetching trending tags:", error);
     }
   };
 
   const handleVote = async (questionId, voteType) => {
     try {
-      const response = await fetch('http://localhost:3001/api/forum/vote', {
-        method: 'POST',
+      const response = await fetch(buildApiUrl(API_ENDPOINTS.FORUM.VOTE), {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           targetId: questionId,
-          targetType: 'Question',
-          voteType
+          targetType: "Question",
+          voteType,
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to vote');
-      
+      if (!response.ok) throw new Error("Failed to vote");
+
       const data = await response.json();
-      
+
       // Update the question in the local state
-      setQuestions(prevQuestions =>
-        prevQuestions.map(q =>
-          q._id === questionId
-            ? { ...q, votes: data.votes }
-            : q
+      setQuestions((prevQuestions) =>
+        prevQuestions.map((q) =>
+          q._id === questionId ? { ...q, votes: data.votes } : q
         )
       );
 
       toast.success(`Vote ${data.action} successfully`);
     } catch (error) {
-      console.error('Error voting:', error);
-      toast.error('Failed to vote');
+      console.error("Error voting:", error);
+      toast.error("Failed to vote");
     }
   };
 
@@ -146,15 +149,15 @@ const Forum = () => {
 
     // Check file size (1MB = 1024 * 1024 bytes)
     if (file.size > 1024 * 1024) {
-      toast.error('Image size must be less than 1MB');
-      e.target.value = ''; // Clear the input
+      toast.error("Image size must be less than 1MB");
+      e.target.value = ""; // Clear the input
       return;
     }
 
     // Check file type
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
-      e.target.value = ''; // Clear the input
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      e.target.value = ""; // Clear the input
       return;
     }
 
@@ -172,87 +175,87 @@ const Forum = () => {
     setSelectedImage(null);
     setImagePreview(null);
     // Clear file input
-    const fileInput = document.getElementById('image-upload');
-    if (fileInput) fileInput.value = '';
+    const fileInput = document.getElementById("image-upload");
+    if (fileInput) fileInput.value = "";
   };
 
   const uploadImage = async (file) => {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append("image", file);
 
     try {
-      const response = await fetch('http://localhost:3001/api/upload/image', {
-        method: 'POST',
+      const response = await fetch(buildApiUrl(API_ENDPOINTS.UPLOAD.IMAGE), {
+        method: "POST",
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Failed to upload image');
-      
+      if (!response.ok) throw new Error("Failed to upload image");
+
       const data = await response.json();
       return data.imageUrl;
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error("Error uploading image:", error);
       throw error;
     }
   };
 
   const handleCreateQuestion = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim() || !formData.content.trim()) {
-      toast.error('Title and content are required');
+      toast.error("Title and content are required");
       return;
     }
 
     try {
       const tagsArray = formData.tags
-        .split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0);
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0);
 
       let imageUrl = null;
-      
+
       // Upload image if selected
       if (selectedImage) {
         setUploadingImage(true);
         try {
           imageUrl = await uploadImage(selectedImage);
         } catch (error) {
-          toast.error('Failed to upload image');
+          toast.error("Failed to upload image");
           setUploadingImage(false);
           return;
         }
         setUploadingImage(false);
       }
 
-      const response = await fetch('http://localhost:3001/api/forum/questions', {
-        method: 'POST',
+      const response = await fetch(buildApiUrl(API_ENDPOINTS.FORUM.QUESTIONS), {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           title: formData.title,
           content: formData.content,
           category: formData.category,
           tags: tagsArray,
-          image: imageUrl
+          image: imageUrl,
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to create question');
-      
+      if (!response.ok) throw new Error("Failed to create question");
+
       const data = await response.json();
-      
+
       // Reset form
-      setFormData({ title: '', content: '', category: 'General', tags: '' });
+      setFormData({ title: "", content: "", category: "General", tags: "" });
       setSelectedImage(null);
       setImagePreview(null);
       setShowCreateForm(false);
       fetchQuestions(); // Refresh questions list
-      toast.success('Question posted successfully!');
+      toast.success("Question posted successfully!");
     } catch (error) {
-      console.error('Error creating question:', error);
-      toast.error('Failed to create question');
+      console.error("Error creating question:", error);
+      toast.error("Failed to create question");
     }
   };
 
@@ -260,31 +263,35 @@ const Forum = () => {
     const now = new Date();
     const time = new Date(timestamp);
     const diffInSeconds = Math.floor((now - time) / 1000);
-    
-    if (diffInSeconds < 60) return 'just now';
+
+    if (diffInSeconds < 60) return "just now";
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    if (diffInSeconds < 86400)
+      return `${Math.floor(diffInSeconds / 3600)}h ago`;
     return `${Math.floor(diffInSeconds / 86400)}d ago`;
   };
 
   const getScoreColor = (upvotes, downvotes) => {
     const score = upvotes - downvotes;
-    if (score > 0) return 'text-green-600 dark:text-green-400';
-    if (score < 0) return 'text-red-600 dark:text-red-400';
-    return 'text-gray-600 dark:text-gray-400';
+    if (score > 0) return "text-green-600 dark:text-green-400";
+    if (score < 0) return "text-red-600 dark:text-red-400";
+    return "text-gray-600 dark:text-gray-400";
   };
 
   const handleQuestionClick = async (questionId) => {
     try {
       // Increment view count
-      await fetch(`http://localhost:3001/api/forum/questions/${questionId}/view`, {
-        method: 'POST',
-      });
+      await fetch(
+        `http://localhost:3001/api/forum/questions/${questionId}/view`,
+        {
+          method: "POST",
+        }
+      );
 
       // Navigate to question detail
       navigate(`/forum/question/${questionId}`);
     } catch (error) {
-      console.error('Error incrementing view count:', error);
+      console.error("Error incrementing view count:", error);
       // Still navigate even if view count fails
       navigate(`/forum/question/${questionId}`);
     }
@@ -299,21 +306,21 @@ const Forum = () => {
     try {
       if (navigator.share) {
         await navigator.share({
-          title: 'Check out this question on Campus Connect',
+          title: "Check out this question on Campus Connect",
           url: questionUrl,
         });
       } else {
         await navigator.clipboard.writeText(questionUrl);
-        toast.success('Link copied to clipboard!');
+        toast.success("Link copied to clipboard!");
       }
     } catch (error) {
       // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(questionUrl);
-        toast.success('Link copied to clipboard!');
+        toast.success("Link copied to clipboard!");
       } catch (fallbackError) {
-        console.error('Error sharing:', error);
-        toast.error('Failed to share link');
+        console.error("Error sharing:", error);
+        toast.error("Failed to share link");
       }
     }
   };
@@ -334,7 +341,8 @@ const Forum = () => {
               </h1>
             </div>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              Ask questions, share knowledge, and connect with your campus community
+              Ask questions, share knowledge, and connect with your campus
+              community
             </p>
             <div className="mt-6 flex items-center justify-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
               <div className="flex items-center">
@@ -374,7 +382,7 @@ const Forum = () => {
                 <Filter className="w-5 h-5 mr-2" />
                 Filters
               </h3>
-              
+
               {/* Sort Options */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -404,7 +412,9 @@ const Forum = () => {
                 >
                   <option value="all">All Categories</option>
                   {categories.map((cat) => (
-                    <option key={cat} value={cat}>{cat}</option>
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -511,7 +521,12 @@ const Forum = () => {
             ) : (
               <div className="space-y-4">
                 {questions.map((question, index) => (
-                  <div key={question._id} className={`card-enhanced hover-3d interactive-scale animate-fade-in-up stagger-${(index % 5) + 1} relative overflow-hidden group`}>
+                  <div
+                    key={question._id}
+                    className={`card-enhanced hover-3d interactive-scale animate-fade-in-up stagger-${
+                      (index % 5) + 1
+                    } relative overflow-hidden group`}
+                  >
                     <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 via-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative flex items-start space-x-6">
                       {/* Vote Section */}
@@ -520,29 +535,34 @@ const Forum = () => {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            handleVote(question._id, 'upvote');
+                            handleVote(question._id, "upvote");
                           }}
                           className={`w-10 h-10 rounded-xl transition-all duration-200 flex items-center justify-center ${
-                            question.userVote === 'upvote'
-                              ? 'text-white bg-gradient-to-br from-green-500 to-green-600 shadow-lg transform scale-110'
-                              : 'text-gray-600 dark:text-gray-400 hover:bg-gradient-to-br hover:from-green-100 hover:to-green-200 dark:hover:from-green-900 dark:hover:to-green-800 hover:text-green-600 dark:hover:text-green-400 hover:shadow-md hover:scale-105'
+                            question.userVote === "upvote"
+                              ? "text-white bg-gradient-to-br from-green-500 to-green-600 shadow-lg transform scale-110"
+                              : "text-gray-600 dark:text-gray-400 hover:bg-gradient-to-br hover:from-green-100 hover:to-green-200 dark:hover:from-green-900 dark:hover:to-green-800 hover:text-green-600 dark:hover:text-green-400 hover:shadow-md hover:scale-105"
                           }`}
                         >
                           <ThumbsUp className="w-5 h-5" />
                         </button>
-                        <span className={`text-lg font-bold ${getScoreColor(question.votes.upvotes, question.votes.downvotes)}`}>
+                        <span
+                          className={`text-lg font-bold ${getScoreColor(
+                            question.votes.upvotes,
+                            question.votes.downvotes
+                          )}`}
+                        >
                           {question.votes.upvotes - question.votes.downvotes}
                         </span>
                         <button
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            handleVote(question._id, 'downvote');
+                            handleVote(question._id, "downvote");
                           }}
                           className={`w-10 h-10 rounded-xl transition-all duration-200 flex items-center justify-center ${
-                            question.userVote === 'downvote'
-                              ? 'text-white bg-gradient-to-br from-red-500 to-red-600 shadow-lg transform scale-110'
-                              : 'text-gray-600 dark:text-gray-400 hover:bg-gradient-to-br hover:from-red-100 hover:to-red-200 dark:hover:from-red-900 dark:hover:to-red-800 hover:text-red-600 dark:hover:text-red-400 hover:shadow-md hover:scale-105'
+                            question.userVote === "downvote"
+                              ? "text-white bg-gradient-to-br from-red-500 to-red-600 shadow-lg transform scale-110"
+                              : "text-gray-600 dark:text-gray-400 hover:bg-gradient-to-br hover:from-red-100 hover:to-red-200 dark:hover:from-red-900 dark:hover:to-red-800 hover:text-red-600 dark:hover:text-red-400 hover:shadow-md hover:scale-105"
                           }`}
                         >
                           <ThumbsDown className="w-5 h-5" />
@@ -560,7 +580,9 @@ const Forum = () => {
                           </span>
                           <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
                             <div className="w-6 h-6 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center mr-2">
-                              <span className="text-xs text-white font-bold">{question.author.charAt(0).toUpperCase()}</span>
+                              <span className="text-xs text-white font-bold">
+                                {question.author.charAt(0).toUpperCase()}
+                              </span>
                             </div>
                             {question.author}
                           </span>
@@ -582,7 +604,7 @@ const Forum = () => {
                               alt="Question image"
                               className="max-w-full h-auto max-h-48 object-cover rounded-lg border dark:border-gray-600"
                               onError={(e) => {
-                                e.target.style.display = 'none';
+                                e.target.style.display = "none";
                               }}
                             />
                           </div>
@@ -612,17 +634,27 @@ const Forum = () => {
                           <div className="flex items-center space-x-6 text-sm">
                             <div className="flex items-center bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-lg">
                               <MessageSquare className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" />
-                              <span className="text-blue-700 dark:text-blue-300 font-medium">{question.commentCount || 0}</span>
-                              <span className="text-blue-600 dark:text-blue-400 ml-1">comments</span>
+                              <span className="text-blue-700 dark:text-blue-300 font-medium">
+                                {question.commentCount || 0}
+                              </span>
+                              <span className="text-blue-600 dark:text-blue-400 ml-1">
+                                comments
+                              </span>
                             </div>
                             <div className="flex items-center bg-green-50 dark:bg-green-900/20 px-3 py-1 rounded-lg">
                               <Eye className="w-4 h-4 mr-2 text-green-600 dark:text-green-400" />
-                              <span className="text-green-700 dark:text-green-300 font-medium">{question.viewCount || 0}</span>
-                              <span className="text-green-600 dark:text-green-400 ml-1">views</span>
+                              <span className="text-green-700 dark:text-green-300 font-medium">
+                                {question.viewCount || 0}
+                              </span>
+                              <span className="text-green-600 dark:text-green-400 ml-1">
+                                views
+                              </span>
                             </div>
                           </div>
                           <button
-                            onClick={(e) => handleShareQuestion(question._id, e)}
+                            onClick={(e) =>
+                              handleShareQuestion(question._id, e)
+                            }
                             className="p-2 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:scale-105"
                             title="Share question"
                           >
@@ -641,7 +673,9 @@ const Forum = () => {
               <div className="flex justify-center mt-8">
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
                     disabled={currentPage === 1}
                     className="px-3 py-2 bg-white dark:bg-dark-bg-700 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-bg-600 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -655,8 +689,8 @@ const Forum = () => {
                         onClick={() => setCurrentPage(page)}
                         className={`px-3 py-2 rounded-md text-sm font-medium ${
                           currentPage === page
-                            ? 'bg-primary-600 text-white'
-                            : 'bg-white dark:bg-dark-bg-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-bg-600'
+                            ? "bg-primary-600 text-white"
+                            : "bg-white dark:bg-dark-bg-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-bg-600"
                         }`}
                       >
                         {page}
@@ -664,7 +698,9 @@ const Forum = () => {
                     );
                   })}
                   <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
                     disabled={currentPage === totalPages}
                     className="px-3 py-2 bg-white dark:bg-dark-bg-700 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-bg-600 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -684,7 +720,7 @@ const Forum = () => {
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   Ask a Question
                 </h2>
-                
+
                 <form onSubmit={handleCreateQuestion} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -693,7 +729,9 @@ const Forum = () => {
                     <input
                       type="text"
                       value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, title: e.target.value })
+                      }
                       placeholder="What's your question?"
                       className="w-full input-field dark:bg-dark-bg-700 dark:text-white dark:placeholder-gray-400"
                       required
@@ -706,7 +744,9 @@ const Forum = () => {
                     </label>
                     <textarea
                       value={formData.content}
-                      onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, content: e.target.value })
+                      }
                       placeholder="Provide more details about your question..."
                       rows={6}
                       className="w-full input-field dark:bg-dark-bg-700 dark:text-white dark:placeholder-gray-400"
@@ -720,11 +760,15 @@ const Forum = () => {
                     </label>
                     <select
                       value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
                       className="w-full input-field dark:bg-dark-bg-700 dark:text-white dark:placeholder-gray-400"
                     >
                       {categories.map((cat) => (
-                        <option key={cat} value={cat}>{cat}</option>
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -736,7 +780,9 @@ const Forum = () => {
                     <input
                       type="text"
                       value={formData.tags}
-                      onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, tags: e.target.value })
+                      }
                       placeholder="e.g., javascript, react, web-development"
                       className="w-full input-field dark:bg-dark-bg-700 dark:text-white dark:placeholder-gray-400"
                     />
@@ -750,11 +796,17 @@ const Forum = () => {
                     <div className="mt-1">
                       {!imagePreview ? (
                         <div className="flex items-center justify-center w-full">
-                          <label htmlFor="image-upload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 transition-colors">
+                          <label
+                            htmlFor="image-upload"
+                            className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 transition-colors"
+                          >
                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
                               <Upload className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" />
                               <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                <span className="font-semibold">Click to upload</span> or drag and drop
+                                <span className="font-semibold">
+                                  Click to upload
+                                </span>{" "}
+                                or drag and drop
                               </p>
                               <p className="text-xs text-gray-500 dark:text-gray-400">
                                 PNG, JPG, JPEG (MAX. 1MB)
@@ -796,12 +848,12 @@ const Forum = () => {
                     >
                       Cancel
                     </button>
-                    <button 
-                      type="submit" 
+                    <button
+                      type="submit"
                       disabled={uploadingImage}
                       className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {uploadingImage ? 'Uploading Image...' : 'Post Question'}
+                      {uploadingImage ? "Uploading Image..." : "Post Question"}
                     </button>
                   </div>
                 </form>

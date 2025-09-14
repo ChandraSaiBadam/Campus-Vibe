@@ -1,0 +1,344 @@
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          ["AWS/Lambda", "Invocations", "FunctionName", "campus-vibe-server-production-api"],
+          [".", "Errors", ".", "."],
+          [".", "Duration", ".", "."],
+          [".", "Throttles", ".", "."],
+          [".", "ConcurrentExecutions", ".", "."]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "us-east-1",
+        "title": "Lambda Performance Overview",
+        "period": 300,
+        "stat": "Average",
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        },
+        "annotations": {
+          "horizontal": [
+            {
+              "label": "Error Threshold",
+              "value": 10
+            },
+            {
+              "label": "Duration Threshold (10s)",
+              "value": 10000
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          ["AWS/ApiGateway", "Count", "ApiName", "campus-vibe-server-production"],
+          [".", "4XXError", ".", "."],
+          [".", "5XXError", ".", "."],
+          [".", "Latency", ".", "."]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "us-east-1",
+        "title": "API Gateway Performance",
+        "period": 300,
+        "stat": "Sum",
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        },
+        "annotations": {
+          "horizontal": [
+            {
+              "label": "Latency Threshold (2s)",
+              "value": 2000
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 6,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          ["CampusVibe/Application", "EstimatedMonthlyCost", "Service", "CampusVibe"],
+          [".", "BudgetUtilization", ".", "."]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "us-east-1",
+        "title": "Cost Monitoring",
+        "period": 300,
+        "stat": "Average",
+        "yAxis": {
+          "left": {
+            "min": 0,
+            "max": 5
+          }
+        },
+        "annotations": {
+          "horizontal": [
+            {
+              "label": "Budget Limit ($5)",
+              "value": 5
+            },
+            {
+              "label": "Warning Threshold (80%)",
+              "value": 80
+            },
+            {
+              "label": "Critical Threshold (95%)",
+              "value": 95
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "x": 8,
+      "y": 6,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          ["CampusVibe/Application", "LambdaRequestsFreeTierUtilization", "Service", "CampusVibe"],
+          [".", "LambdaComputeFreeTierUtilization", ".", "."],
+          [".", "ApiGatewayFreeTierUtilization", ".", "."]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "us-east-1",
+        "title": "Free Tier Utilization",
+        "period": 300,
+        "stat": "Average",
+        "yAxis": {
+          "left": {
+            "min": 0,
+            "max": 100
+          }
+        },
+        "annotations": {
+          "horizontal": [
+            {
+              "label": "Free Tier Limit (100%)",
+              "value": 100
+            },
+            {
+              "label": "Warning Threshold (90%)",
+              "value": 90
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "x": 16,
+      "y": 6,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          ["CampusVibe/Application", "ApiResponseTime", "Method", "GET"],
+          ["...", "POST"],
+          ["...", "PUT"],
+          ["...", "DELETE"],
+          [".", "DatabaseResponseTime", "Operation", "find"],
+          ["...", "create"],
+          ["...", "update"]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "us-east-1",
+        "title": "Response Time Analysis",
+        "period": 300,
+        "stat": "Average",
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        },
+        "annotations": {
+          "horizontal": [
+            {
+              "label": "Response Time Target (2s)",
+              "value": 2000
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 12,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          ["CampusVibe/Application", "ApiRequests", "Method", "GET"],
+          ["...", "POST"],
+          ["...", "PUT"],
+          ["...", "DELETE"],
+          [".", "ApiErrors", "StatusClass", "4xx"],
+          ["...", "5xx"]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "us-east-1",
+        "title": "API Request Volume and Errors",
+        "period": 300,
+        "stat": "Sum",
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 12,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          ["CampusVibe/Application", "MemoryHeapUsed", "FunctionName", "campus-vibe-server-production-api"],
+          [".", "MemoryUtilization", ".", "."],
+          ["AWS/Lambda", "Duration", "FunctionName", "campus-vibe-server-production-api"]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "us-east-1",
+        "title": "Memory and Performance Metrics",
+        "period": 300,
+        "stat": "Average",
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        }
+      }
+    },
+    {
+      "type": "log",
+      "x": 0,
+      "y": 18,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "query": "SOURCE '/aws/lambda/campus-vibe-server-production-api'\n| fields @timestamp, level, message, duration\n| filter level = \"ERROR\"\n| sort @timestamp desc\n| limit 20",
+        "region": "us-east-1",
+        "title": "Recent Errors",
+        "view": "table"
+      }
+    },
+    {
+      "type": "log",
+      "x": 12,
+      "y": 18,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "query": "SOURCE '/aws/lambda/campus-vibe-server-production-api'\n| fields @timestamp, @message, duration\n| filter @message like /API Request/ and duration > 2000\n| sort @timestamp desc\n| limit 20",
+        "region": "us-east-1",
+        "title": "Slow API Requests (>2s)",
+        "view": "table"
+      }
+    },
+    {
+      "type": "number",
+      "x": 0,
+      "y": 24,
+      "width": 6,
+      "height": 3,
+      "properties": {
+        "metrics": [
+          ["CampusVibe/Application", "EstimatedMonthlyCost", "Service", "CampusVibe"]
+        ],
+        "view": "singleValue",
+        "region": "us-east-1",
+        "title": "Current Monthly Cost",
+        "period": 300,
+        "stat": "Average",
+        "setPeriodToTimeRange": true
+      }
+    },
+    {
+      "type": "number",
+      "x": 6,
+      "y": 24,
+      "width": 6,
+      "height": 3,
+      "properties": {
+        "metrics": [
+          ["CampusVibe/Application", "BudgetUtilization", "Service", "CampusVibe"]
+        ],
+        "view": "singleValue",
+        "region": "us-east-1",
+        "title": "Budget Utilization (%)",
+        "period": 300,
+        "stat": "Average",
+        "setPeriodToTimeRange": true
+      }
+    },
+    {
+      "type": "number",
+      "x": 12,
+      "y": 24,
+      "width": 6,
+      "height": 3,
+      "properties": {
+        "metrics": [
+          ["AWS/Lambda", "Invocations", "FunctionName", "campus-vibe-server-production-api"]
+        ],
+        "view": "singleValue",
+        "region": "us-east-1",
+        "title": "Total Invocations (24h)",
+        "period": 86400,
+        "stat": "Sum",
+        "setPeriodToTimeRange": true
+      }
+    },
+    {
+      "type": "number",
+      "x": 18,
+      "y": 24,
+      "width": 6,
+      "height": 3,
+      "properties": {
+        "metrics": [
+          ["AWS/Lambda", "Errors", "FunctionName", "campus-vibe-server-production-api"]
+        ],
+        "view": "singleValue",
+        "region": "us-east-1",
+        "title": "Total Errors (24h)",
+        "period": 86400,
+        "stat": "Sum",
+        "setPeriodToTimeRange": true
+      }
+    }
+  ]
+}

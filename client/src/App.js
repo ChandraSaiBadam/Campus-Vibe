@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import DeploymentInfo from "./components/DeploymentInfo";
 import { useDarkMode } from "./hooks/useDarkMode";
 
 // Lazy load pages for code splitting
@@ -27,7 +28,11 @@ function App() {
 
   return (
     <Router>
-      <div className={`min-h-screen flex flex-col w-full${darkMode ? ' dark' : ''} bg-gray-50 dark:bg-dark-bg-900 transition-colors duration-200`}>
+      <div
+        className={`min-h-screen flex flex-col w-full${
+          darkMode ? " dark" : ""
+        } bg-gray-50 dark:bg-dark-bg-900 transition-colors duration-200`}
+      >
         <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
         <main className="flex-1 w-full bg-gray-50 dark:bg-dark-bg-900 transition-colors duration-200">
           <Suspense fallback={<LoadingSpinner />}>
@@ -68,6 +73,7 @@ function App() {
             },
           }}
         />
+        <DeploymentInfo />
       </div>
     </Router>
   );

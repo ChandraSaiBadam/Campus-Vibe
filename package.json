@@ -8,7 +8,19 @@
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
-    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "test": "node test-deployment.js",
+    "test:deployment": "node test-deployment.js",
+    "test:backend": "cd server && npm run test:deployment",
+    "test:health": "cd server && npm run test:health",
+    "validate:deployment": "node scripts/validate-deployment.js",
+    "validate-config": "node deploy-config.js",
+    "deploy:lambda": "npm run validate-config && serverless deploy --stage prod",
+    "deploy:lambda:dev": "serverless deploy --stage dev",
+    "deploy:remove": "serverless remove --stage prod",
+    "post-deploy": "npm run test:deployment",
+    "logs": "serverless logs -f api --stage prod",
+    "info": "serverless info --stage prod"
   },
   "keywords": [
     "campus",
@@ -22,7 +34,10 @@
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2",
+    "dotenv": "^16.3.1",
     "dotenv-cli": "^10.0.0",
-    "serverless-dotenv-plugin": "^6.0.0"
+    "serverless": "^3.38.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-offline": "^13.3.0"
   }
 }

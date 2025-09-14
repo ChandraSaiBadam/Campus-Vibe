@@ -4,61 +4,91 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-1
-  stage: prod
+  stage: ${opt:stage, 'prod'}
   memorySize: 512
   timeout: 30
+  architecture: arm64
+  versionFunctions: false
+  logRetentionInDays: 7
+
   environment:
     NODE_ENV: production
-    MONGODB_URI: ${env:MONGODB_URI}
-    JWT_SECRET: ${env:JWT_SECRET}
-    ADMIN_SECRET: ${env:ADMIN_SECRET}
-    EMAIL_USER: ${env:EMAIL_USER}
-    EMAIL_PASS: ${env:EMAIL_PASS}
-    EMAIL_SERVICE: ${env:EMAIL_SERVICE}
-    FRONTEND_URL: ${env:FRONTEND_URL}
+    MONGODB_URI: mongodb+srv://parashararyaman108:Campus123@cluster1-trial.7wkhers.mongodb.net/campusconnect?retryWrites=true&w=majority&appName=Cluster1-trial
+    JWT_SECRET: campus-vibe-jwt-secret-key-2024-production
+    ADMIN_SECRET: campus-vibe-admin-secret-key-2024
+    EMAIL_USER: indianchessteam@gmail.com
+    EMAIL_PASS: tlbd ljqh dukr cdyj
+    EMAIL_SERVICE: gmail
+    FRONTEND_URL: https://aryaman108.github.io/CampusVibe
+    MAX_FILE_SIZE: 10485760
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource:
+            - "arn:aws:logs:${aws:region}:${aws:accountId}:log-group:/aws/lambda/*:*:*"
+
+  apiGateway:
+    minimumCompressionSize: 1024
+    binaryMediaTypes:
+      - "image/*"
+      - "application/pdf"
 
 functions:
   api:
     handler: server/lambda.handler
+    memorySize: 512
+    timeout: 30
+    environment:
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     events:
       - http:
           path: /
           method: any
-          cors:
-            origin: "${env:FRONTEND_URL}"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
+          cors: true
       - http:
           path: /{proxy+}
           method: any
-          cors:
-            origin: "${env:FRONTEND_URL}"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
+          cors: true
 
 plugins:
   - serverless-dotenv-plugin
+  - serverless-offline
+
+custom:
+  dotenv:
+    path: server/.env
 
 package:
-  exclude:
-    - .env
-    - .env.local
-    - .env.development
-    - .env.production
-    - .git/**
-    - .gitignore
-    - README.md
-    - test/**
-    - .DS_Store
-  include:
-    - server/**
+  individually: true
+  excludeDevDependencies: true
+  patterns:
+    - "!**"
+    - "server/app.js"
+    - "server/lambda.js"
+    - "server/package.json"
+    - "server/models/**"
+    - "server/routes/**"
+    - "server/utils/**"
+    - "server/node_modules/express/**"
+    - "server/node_modules/cors/**"
+    - "server/node_modules/helmet/**"
+    - "server/node_modules/compression/**"
+    - "server/node_modules/serverless-http/**"
+    - "server/node_modules/jsonwebtoken/**"
+    - "server/node_modules/bcryptjs/**"
+    - "server/node_modules/dotenv/**"
+    - "server/node_modules/mongodb/**"
+    - "server/node_modules/mongoose/**"
+    - "server/node_modules/express-rate-limit/**"
+    - "server/node_modules/morgan/**"
+    - "server/node_modules/multer/**"
+    - "server/node_modules/bson/**"
+    - "server/node_modules/memory-pager/**"
+    - "server/node_modules/sparse-bitfield/**"
